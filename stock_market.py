@@ -94,4 +94,4 @@ if __name__ == "__main__":
     print("Binary Tree:")
     print(f" Root → {tree.label}:{tree.value}")
     print(f" Left → {tree.left.label}:{tree.left.value}")
-
+    print(f" Right → {tree.right.label}:{tree.right.value}")
