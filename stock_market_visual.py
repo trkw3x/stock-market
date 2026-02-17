@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 import time
 import alpaca_trade_api as tradeapi
@@ -13,11 +14,42 @@ SYMBOL = "AAPL"
 ORDER_SIZE = 10  # increase since you have 1M
 last_signal = None
 
+=======
+# stock_market_visual.py
+
+import os
+import alpaca_trade_api as tradeapi
+import matplotlib.pyplot as plt
+
+# ===============================
+# Alpaca API credentials
+# ===============================
+API_KEY = os.getenv("APCA_API_KEY_ID")
+API_SECRET = os.getenv("APCA_API_SECRET_KEY")
+
+BASE_URL = "https://paper-api.alpaca.markets"
+
+if not API_KEY or not API_SECRET:
+    raise RuntimeError("Alpaca API keys not found in environment variables.")
+
+api = tradeapi.REST(
+    API_KEY,
+    API_SECRET,
+    BASE_URL,
+    api_version="v2"
+)
+>>>>>>> 8973684b8ff17e26ef7453a10aef656855351a19
 
 def moving_average(prices, days):
     return sum(prices[-days:]) / days
 
 
+<<<<<<< HEAD
+=======
+# ===============================
+# Trading Logic
+# ===============================
+>>>>>>> 8973684b8ff17e26ef7453a10aef656855351a19
 def trade_decision(prices):
     if len(prices) < 200:
         return "HOLD"
@@ -35,6 +67,7 @@ def trade_decision(prices):
     else:
         return "HOLD"
 
+<<<<<<< HEAD
 
 print("Bot running... Press CTRL+C to stop.")
 
@@ -81,3 +114,29 @@ while True:
     except Exception as e:
         print("Error:", e)
         time.sleep(60)
+=======
+
+# ===============================
+# Main
+# ===============================
+if __name__ == "__main__":
+    bars = api.get_bars("AAPL", tradeapi.TimeFrame.Day, limit=200).df
+
+    prices = bars["close"].tolist()
+    dates = bars.index
+
+    short_ma = [moving_average(prices[:i+1], 50) if i >= 49 else None for i in range(len(prices))]
+    long_ma = [moving_average(prices[:i+1], 200) if i >= 199 else None for i in range(len(prices))]
+
+    signal = trade_decision(prices)
+    print("AAPL Signal:", signal)
+
+    plt.figure(figsize=(12,6))
+    plt.plot(dates, prices, label="Price")
+    plt.plot(dates, short_ma, label="50 MA")
+    plt.plot(dates, long_ma, label="200 MA")
+    plt.title(f"AAPL — {signal}")
+    plt.legend()
+    plt.grid()
+    plt.show()
+>>>>>>> 8973684b8ff17e26ef7453a10aef656855351a19
